@@ -94,4 +94,20 @@ class Rails::BakliteTest < ActiveSupport::TestCase
 
     delete_files [db_name, backup_name]
   end
+
+  test 'it does the upload' do
+    db_name = "#{test_files_path}/test.sqlite"
+    backup_name = "#{test_files_path}/backup.sqlite"
+
+    create_sample_db(db_name)
+
+    Rails::Baklite._backup(
+      SQLite3::Database.new(db_name),
+      backup_name
+    )
+
+    Rails::Baklite.upload(backup_name)
+
+    delete_files [db_name, backup_name]
+  end
 end
