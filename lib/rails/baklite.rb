@@ -70,11 +70,7 @@ module Rails
           "Bearer #{Rails::Baklite.token}"
         req.set_form [['file', file], ['name', name]], 'multipart/form-data'
 
-        res = Net::HTTP.start(uri.hostname, uri.port) do |http|
-          if !Rails.env.test?
-            http.use_ssl = true
-          end
-
+        res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
           http.request(req)
         end
 
