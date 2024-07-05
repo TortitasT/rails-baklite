@@ -65,6 +65,12 @@ module Rails
 
       File.open(backupfile) do |file|
         req = Net::HTTP::Post.new(uri.path)
+
+        if !Rails.env.test?
+          req.use_ssl = true
+          req.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        end
+
         req['Authorization'] =
           "Bearer #{Rails::Baklite.token}"
         req.set_form [['file', file], ['name', name]], 'multipart/form-data'
